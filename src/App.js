@@ -43,6 +43,7 @@ class App extends React.Component {
 					<HeaderComp />
 					<Row>
 						<Col md={6}>
+							TEST
 							{free_week_rotation}
 						</Col>
 						<Col md={6}>

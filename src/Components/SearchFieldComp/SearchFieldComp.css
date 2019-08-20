@@ -1,0 +1,11 @@
+.search-button {
+    cursor: pointer;
+    background-color: #a2e09d !important;
+    color: black;
+    transition: 0.3s;
+}
+
+.search-button:hover {
+    color: white;
+    background-color: #175c11 !important;
+}

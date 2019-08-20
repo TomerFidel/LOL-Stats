@@ -1,0 +1,54 @@
+.champion-info {
+    margin-top: 30px;
+}
+
+.splash {
+    width: 100% !important;
+}
+
+.score-box img {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.score-box span {
+    display: block;
+    margin-top: 15px;
+}
+
+.score-box div {
+    overflow: hidden;
+    border-bottom: 1px solid black;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    position: relative; /* If you want text inside of it */
+}
+
+.score-box {
+    border-right: 1px solid black;
+}
+
+.score-box:last-of-type {
+    border: none;
+}
+
+.skill-box img {
+    border: 2px solid red;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.skill-box img:hover {
+    transform: scale(1.3);
+}
+
+.skill-description {
+    height: 300px;
+    text-align: left;
+}
+

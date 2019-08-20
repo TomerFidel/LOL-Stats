@@ -1,0 +1,15 @@
+.free-week-icons {
+    width: 14%;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.free-week-icons:hover {
+    border: 2px solid red;
+    transform: scale(1.3)
+}
+
+.splash {
+    width: 100%;
+}

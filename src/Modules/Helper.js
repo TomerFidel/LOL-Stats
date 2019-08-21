@@ -2,7 +2,7 @@
 // Gets url and adds to it the cors cheat + apikey
 const getFullUrl = function(url) {
     let cors = "https://cors-anywhere.herokuapp.com/";
-    let apikey = "?api_key=RGAPI-bd3ada0c-a5c0-4249-8814-7576fbef065d";
+    let apikey = "?api_key=RGAPI-99668f19-a31c-41c4-858f-f54f23db7b63";
     return cors + url + apikey;
 }
 
@@ -15,6 +15,7 @@ const findChampions = function(champion_list, champion_ids) {
         let champion = champion_list.find(champ => {
             return parseInt(champ.key) === champion_id;
         });
+
         result.push(champion.id);
     }
 

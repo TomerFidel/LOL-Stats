@@ -40,7 +40,7 @@ class FreeWeekRotationComp extends React.Component {
 
         if (this.state.free_week_rotation) {
             free_week_display = this.state.free_week_rotation.map(val => {
-                let img_source = `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/${val}.png`;
+                let img_source = `http://ddragon.leagueoflegends.com/cdn/9.14.1/img/champion/${val}.png`;
                 return <img className="free-week-icons" src={img_source} key={val} alt={val} onClick={this.displayChampionDetails.bind(this, val)} />
             })
         }

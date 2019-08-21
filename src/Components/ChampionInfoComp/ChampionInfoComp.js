@@ -13,7 +13,7 @@ class ChampionInfoComp extends React.Component {
         if (this.props.champion) {  // champion was chosen
             if (!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.title !== this.props.champion)) { // prevent infinite loops
                 let spell_types = ["Q", "W", "E", "R"];
-                let url = `http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion/${this.props.champion}.json`;
+                let url = `http://ddragon.leagueoflegends.com/cdn/9.14.1/data/en_US/champion/${this.props.champion}.json`;
                 axios.get(url).then( res => { // get one champion info
                     console.log("INSIDE CHAMPION INFO AJAX");
                     let champ_data = res.data.data[this.props.champion];
@@ -22,7 +22,7 @@ class ChampionInfoComp extends React.Component {
                         return {
                             id: spell.id,
                             name: spell.name,
-                            image: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/${spell.image.group}/${spell.image.full}`,
+                            image: `http://ddragon.leagueoflegends.com/cdn/9.14.1/img/${spell.image.group}/${spell.image.full}`,
                             description: `[${spell_types[i]}] ${spell.description}`
                         }
                     });
@@ -30,7 +30,7 @@ class ChampionInfoComp extends React.Component {
                     let passive = { // create passive skill object
                         id: champ_data.name + "P",
                         name: champ_data.passive.name,
-                        image: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/${champ_data.passive.image.group}/${champ_data.passive.image.full}`,
+                        image: `http://ddragon.leagueoflegends.com/cdn/9.14.1/img/${champ_data.passive.image.group}/${champ_data.passive.image.full}`,
                         description: "[Passive] " + champ_data.passive.description
                     }
 

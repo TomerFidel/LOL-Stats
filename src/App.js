@@ -5,18 +5,22 @@ import HeaderComp from './Frame/HeaderComp/HeaderComp';
 import FreeWeekRotationComp from './Components/FreeWeekRotationComp/FreeWeekRotationComp';
 import SearchFieldComp from './Components/SearchFieldComp/SearchFieldComp';
 import MatchHistoryComp from './Components/MatchHistoryComp/MatchHistoryComp';
+import {getFullUrl} from './Modules/Helper';
 import "./App.css";
 
 class App extends React.Component {
 	state = {
 		champions: null,
-		username: ""
+		username: "",
+		search_error: "",
+		display_history: false,
+		account_id: ""
 	}
 
 	componentDidMount() {
 		// Get all champions from the server when app starts
 
-		let champions_url = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json"; // all champions json
+		let champions_url = "http://ddragon.leagueoflegends.com/cdn/9.14.1/data/en_US/champion.json"; // all champions json
 		axios.get(champions_url).then(res => {
 			console.log("INSIDE CHAMPION LIST AJAX");
 
@@ -30,7 +34,34 @@ class App extends React.Component {
 	}
 	
 	searchForUser() {
+		if (this.state.username === "") {
+			this.setState({
+				search_error: "You must enter a username to search",
+				account_id: "",
+				display_history: false
+			});
+			return ;
+		}
 		console.log(`Searching for ${this.state.username}`);
+		let search_url = getFullUrl("https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + this.state.username);
+		axios.get(search_url).then(res => {
+			console.log(res);
+			console.log(res.data.accountId);
+			this.setState({
+				search_error: "",
+				account_id: res.data.accountId,
+				display_history: true
+			})
+		}).catch( err => {
+			console.log(err.response);
+			if (err.response.status === 404) {
+				this.setState({
+					search_error: "The username you entered does not exist in EUNE server",
+					account_id: "",
+					display_history: false
+				})
+			}
+		})
 	}
 
 
@@ -57,7 +88,8 @@ class App extends React.Component {
 								changed_handler={this.changedHandler.bind(this)}
 								submit_handler={this.searchForUser.bind(this)} />
 
-							<MatchHistoryComp />
+							<MatchHistoryComp display={this.state.display_history} id={this.state.account_id} name={this.state.username} champ_list={this.state.champions} />
+							{this.state.search_error}
 							
 						</Col>
 					</Row>

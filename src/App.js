@@ -4,6 +4,7 @@ import axios from 'axios';
 import HeaderComp from './Frame/HeaderComp/HeaderComp';
 import FreeWeekRotationComp from './Components/FreeWeekRotationComp/FreeWeekRotationComp';
 import SearchFieldComp from './Components/SearchFieldComp/SearchFieldComp';
+import MatchHistoryComp from './Components/MatchHistoryComp/MatchHistoryComp';
 import "./App.css";
 
 class App extends React.Component {
@@ -26,7 +27,11 @@ class App extends React.Component {
 	 
 	changedHandler(e) {
         this.setState({username: e.target.value});
-    }
+	}
+	
+	searchForUser() {
+		console.log(`Searching for ${this.state.username}`);
+	}
 
 
 	render() {
@@ -47,7 +52,13 @@ class App extends React.Component {
 							{free_week_rotation}
 						</Col>
 						<Col md={6}>
-							<SearchFieldComp username={this.state.username} changed_handler={this.changedHandler.bind(this)} />
+							<SearchFieldComp 
+								username={this.state.username} 
+								changed_handler={this.changedHandler.bind(this)}
+								submit_handler={this.searchForUser.bind(this)} />
+
+							<MatchHistoryComp />
+							
 						</Col>
 					</Row>
 					

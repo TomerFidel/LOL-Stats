@@ -8,7 +8,7 @@ class SearchFieldComp extends React.Component {
             <InputGroup size="lg">
                 <FormControl aria-label="Large" onChange={this.props.changed_handler}  aria-describedby="inputGroup-sizing-sm" name="username" value={this.props.username} placeholder="Enter username here" />
                 <InputGroup.Prepend>
-                    <InputGroup.Text id="inputGroup-sizing-lg" className="search-button">View Match History</InputGroup.Text>
+                    <InputGroup.Text id="inputGroup-sizing-lg" onClick={this.props.submit_handler} className="search-button">View Match History</InputGroup.Text>
                 </InputGroup.Prepend>
             </InputGroup>
         )

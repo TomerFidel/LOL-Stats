@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
-import { getFullUrl, findChampions } from '../../Modules/Helper';
+import { findChampions } from '../../Modules/Helper';
 import { Spinner } from 'react-bootstrap';
 import ChampionInfoComp from './../ChampionInfoComp/ChampionInfoComp';
+import { fetchFreeWeekRotation, getSquareImage } from './../../Modules/APIGateway';
 import './FreeWeekRotationComp.css';
 
 class FreeWeekRotationComp extends React.Component {
@@ -13,12 +13,8 @@ class FreeWeekRotationComp extends React.Component {
 
     componentDidMount() {
         // Get free week champions on application load
-        let free_champions_url = getFullUrl("https://eun1.api.riotgames.com/lol/platform/v3/champion-rotations"); // free champions rotations
-        axios.get(free_champions_url).then(res => {
-            console.log("INSIDE FREE WEEK ROTATION AJAX");
-
-            let free_week = res.data.freeChampionIds;
-            free_week = findChampions(this.props.champions.data, free_week);
+        fetchFreeWeekRotation().then(res => {
+            let free_week = findChampions(this.props.champions.data, res);
             this.setState({
                 free_week_rotation: free_week,
             })
@@ -40,7 +36,7 @@ class FreeWeekRotationComp extends React.Component {
 
         if (this.state.free_week_rotation) {
             free_week_display = this.state.free_week_rotation.map(val => {
-                let img_source = `http://ddragon.leagueoflegends.com/cdn/9.14.1/img/champion/${val}.png`;
+                let img_source = getSquareImage('champion', val + '.png');
                 return <img className="free-week-icons" src={img_source} key={val} alt={val} onClick={this.displayChampionDetails.bind(this, val)} />
             })
         }

@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
-import { getFullUrl , findChampions } from '../../Modules/Helper';
+import { findChampions } from '../../Modules/Helper';
 import { Spinner } from 'react-bootstrap';
+import { fetchMatchHistory } from '../../Modules/APIGateway';
 
 class MatchHistoryComp extends React.Component {
 
@@ -13,11 +13,7 @@ class MatchHistoryComp extends React.Component {
         if (this.props.display) {
             console.log("Updated");
             if (!this.state.match_history) {
-                console.log("Going to ajax");
-                let account_id = this.props.id;
-                let history_url = getFullUrl("https://eun1.api.riotgames.com/lol/match/v4/matchlists/by-account/" + account_id);
-                history_url += "&endIndex=10";
-                axios.get(history_url).then(res => {
+                fetchMatchHistory(this.props.id).then(res => {
                     console.log(res);
                     this.setState({
                         match_history: res.data.matches

@@ -4,7 +4,7 @@ import { fetchAccountId, fetchMatchHistory } from '../../Modules/APIGateway';
 import GameInfo from '../../Components/GameInfo/GameInfo';
 import './SearchField.css';
 
-function SearchField() {
+function SearchField(props) {
 
     const [name, setName] = useState("");
     const [error, setError] = useState("");
@@ -23,7 +23,7 @@ function SearchField() {
     }
 
     let render_history = history.map(val => {
-        return <GameInfo info={val} key={val.gameId}/>
+        return <GameInfo info={val} key={val.gameId} champions={props.champions}/>
     })
 
     return (

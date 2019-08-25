@@ -33,7 +33,7 @@ class Homepage extends React.Component {
 							{free_week_rotation}
                         </Col>
                         <Col md={6}>
-                            <SearchField />
+                            <SearchField champions={this.state.champions}/>
                         </Col>
                     </Row>
 

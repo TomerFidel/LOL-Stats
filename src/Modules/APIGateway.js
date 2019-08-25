@@ -9,7 +9,7 @@ const fetchChampionList = () => {
     return new Promise((resolve, reject) => {
         let url = `http://ddragon.leagueoflegends.com/cdn/${recent_patch}/data/en_US/champion.json`;
         axios.get(url).then(result => {
-            resolve(result);
+            resolve(result.data);
         }).catch(err => {
             reject(err);
         });
@@ -54,7 +54,7 @@ const fetchMatchHistory = account_id => {
         let num_of_games = 10;
         let url = `${cors}https://${server_name}.api.riotgames.com/lol/match/v4/matchlists/by-account/${account_id}?api_key=${apikey}&endIndex=${num_of_games}`
         axios.get(url).then(result => {
-            resolve(result);
+            resolve(result.data.matches);
         }).catch(err => {
             reject(err);
         })

@@ -1,24 +1,37 @@
 import React from 'react';
-import { findChampions } from '../../Modules/Helper';
 import { Spinner } from 'react-bootstrap';
-import ChampionInfoComp from './../ChampionInfoComp/ChampionInfoComp';
-import { fetchFreeWeekRotation, getSquareImage } from './../../Modules/APIGateway';
-import './FreeWeekRotationComp.css';
+import ChampionInfo from '../ChampionInfo/ChampionInfo';
+import { fetchFreeWeekRotation, getSquareImage } from '../../Modules/APIGateway';
+import './FreeWeekRotation.css';
 
-class FreeWeekRotationComp extends React.Component {
+class FreeWeekRotation extends React.Component {
     state = {
         free_week_rotation: null,
         displayed_champ: false
     }
 
-    componentDidMount() {
+    findChampions(champion_list, champion_ids) {
+        champion_list = Object.values(champion_list);
+        let result = [];
+        for (let champion_id of champion_ids) {
+            let champion = champion_list.find(champ => {
+                return parseInt(champ.key) === champion_id;
+            });
+
+            result.push(champion.id);
+        }
+
+        return result;
+    }
+
+
+    async componentDidMount() {
         // Get free week champions on application load
-        fetchFreeWeekRotation().then(res => {
-            let free_week = findChampions(this.props.champions.data, res);
-            this.setState({
-                free_week_rotation: free_week,
-            })
-        });
+        let free_week = await fetchFreeWeekRotation();
+        free_week = this.findChampions(this.props.champions.data, free_week);
+        this.setState({
+            free_week_rotation: free_week,
+        })
     }
 
     displayChampionDetails(champion) {
@@ -45,7 +58,7 @@ class FreeWeekRotationComp extends React.Component {
             <div className="free-week-rotation">
                 <h1>Free week rotation</h1>
                 {free_week_display}
-                <ChampionInfoComp champion={this.state.displayed_champ} />
+                <ChampionInfo champion={this.state.displayed_champ} />
             </div>
         )
     }
@@ -53,4 +66,4 @@ class FreeWeekRotationComp extends React.Component {
     
 }
 
-export default FreeWeekRotationComp;
+export default FreeWeekRotation;

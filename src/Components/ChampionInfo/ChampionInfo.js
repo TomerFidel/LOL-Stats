@@ -1,48 +1,45 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import './ChampionInfoComp.css';
+import './ChampionInfo.css';
 import { fetchSingleChampionData, getSplashImage, getSquareImage } from '../../Modules/APIGateway';
 
-class ChampionInfoComp extends React.Component {
+class ChampionInfo extends React.Component {
     state = {
         loadedPost: null,
         displayed_description: "Click/Drag mouse over one of the skills to display the description."
     }
 
-    componentDidUpdate() {
-        if (this.props.champion) { // champion was chosen
-            console.log("???");
+    async componentDidUpdate() {
+        if (this.props.champion) {
             if (!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.title !== this.props.champion)) { // prevent infinite loops
                 let spell_types = ["Q", "W", "E", "R"];
-                fetchSingleChampionData(this.props.champion).then( res => { // get one champion info
-                    console.log("Alo");
+                let champ_data = await fetchSingleChampionData(this.props.champion);
 
-                    let skills = res.spells.map((spell, i) => { // create skills array
-                        return {
-                            id: spell.id,
-                            name: spell.name,
-                            image: getSquareImage(spell.image.group,spell.image.full),
-                            description: `[${spell_types[i]}] ${spell.description}`
-                        }
-                    });
-
-                    let passive = { // create passive skill object
-                        id: res.name + "P",
-                        name: res.passive.name,
-                        image: getSquareImage(res.passive.image.group,res.passive.image.full),
-                        description: "[Passive] " + res.passive.description
+                let skills = champ_data.spells.map((spell, i) => { // create skills array
+                    return {
+                        id: spell.id,
+                        name: spell.name,
+                        image: getSquareImage(spell.image.group,spell.image.full),
+                        description: `[${spell_types[i]}] ${spell.description}`
                     }
+                });
 
-                    let full_skillset = [passive, ...skills]; // merge passive skill with the skills array
+                let passive = { // create passive skill object
+                    id: champ_data.name + "P",
+                    name: champ_data.passive.name,
+                    image: getSquareImage(champ_data.passive.image.group, champ_data.passive.image.full),
+                    description: "[Passive] " + champ_data.passive.description
+                }
 
-                    let loadedInfo = {
-                        title: this.props.champion,
-                        sub_title: res.title,
-                        stats: res.info,
-                        skills: full_skillset
-                    }
-                    this.setState({loadedPost: loadedInfo})
-                })
+                let full_skillset = [passive, ...skills]; // merge passive skill with the skills array
+
+                let loadedInfo = {
+                    title: this.props.champion,
+                    sub_title: champ_data.title,
+                    stats: champ_data.info,
+                    skills: full_skillset
+                }
+                this.setState({loadedPost: loadedInfo})
             }
         }
     }
@@ -85,4 +82,4 @@ class ChampionInfoComp extends React.Component {
     }
 }
 
-export default ChampionInfoComp;
+export default ChampionInfo;

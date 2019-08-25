@@ -1,13 +1,14 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import ChampionInfo from '../ChampionInfo/ChampionInfo';
-import { fetchFreeWeekRotation, getSquareImage } from '../../Modules/APIGateway';
+import { fetchFreeWeekRotation, getSquareImage, fetchSingleChampionData, getSplashImage} from '../../Modules/APIGateway';
 import './FreeWeekRotation.css';
 
 class FreeWeekRotation extends React.Component {
     state = {
         free_week_rotation: null,
-        displayed_champ: false
+        displayed_champ: true,
+        isVisibleDisplayedChamp: false
     }
 
     findChampions(champion_list, champion_ids) {
@@ -34,8 +35,36 @@ class FreeWeekRotation extends React.Component {
         })
     }
 
-    displayChampionDetails(champion) {
-        this.setState({displayed_champ: champion})
+    async displayChampionDetails(champion) {
+        let champ_data = await fetchSingleChampionData(champion);
+        let spell_types = ["Q", "W", "E", "R"];
+        let skills = champ_data.spells.map((spell, i) => { // create skills array
+            return {
+                id: spell.id,
+                name: spell.name,
+                image: getSquareImage(spell.image.group,spell.image.full),
+                description: `[${spell_types[i]}] ${spell.description}`
+            }
+        });
+
+        let passive = { // create passive skill object
+            id: champ_data.name + "P",
+            name: champ_data.passive.name,
+            image: getSquareImage(champ_data.passive.image.group, champ_data.passive.image.full),
+            description: "[Passive] " + champ_data.passive.description
+        }
+
+        let full_skillset = [passive, ...skills]; // merge passive skill with the skills array
+
+        let championInfo = {
+            name: champion,
+            title: champ_data.title,
+            stats: champ_data.info,
+            skills: full_skillset,
+            image: getSplashImage(champion)
+        }
+        console.log(championInfo);
+        this.setState({ isVisibleDisplayedChamp: true, displayed_champ: championInfo});
     }
 
 
@@ -54,11 +83,18 @@ class FreeWeekRotation extends React.Component {
             })
         }
 
+
+        let detailed_champ = "";
+
+        if (this.state.isVisibleDisplayedChamp) {
+            detailed_champ = <ChampionInfo champion={this.state.displayed_champ} />;
+        }
+
         return (
             <div className="free-week-rotation">
                 <h1>Free week rotation</h1>
                 {free_week_display}
-                <ChampionInfo champion={this.state.displayed_champ} />
+                {detailed_champ}
             </div>
         )
     }

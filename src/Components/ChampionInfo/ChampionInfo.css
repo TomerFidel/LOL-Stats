@@ -41,6 +41,7 @@
     cursor: pointer;
     margin-bottom: 20px;
     transition: 0.3s;
+    width: 64px;
 }
 
 .skill-box img:hover {

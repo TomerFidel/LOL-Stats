@@ -63,7 +63,6 @@ class FreeWeekRotation extends React.Component {
             skills: full_skillset,
             image: getSplashImage(champion)
         }
-        console.log(championInfo);
         this.setState({ isVisibleDisplayedChamp: true, displayed_champ: championInfo});
     }
 

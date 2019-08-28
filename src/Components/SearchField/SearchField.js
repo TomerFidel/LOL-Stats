@@ -23,7 +23,7 @@ function SearchField(props) {
     }
 
     let render_history = history.map(val => {
-        return <GameInfo info={val} key={val.gameId} champions={props.champions}/>
+        return <GameInfo info={val} key={val.gameId} champions={props.champions} name={name}/>
     })
 
     return (

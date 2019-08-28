@@ -2,7 +2,7 @@ import axios from 'axios';
 var recent_patch = '9.14.1';
 var server_name = 'eun1'; // Eune
 var cors = 'https://cors-anywhere.herokuapp.com/';
-var apikey = 'RGAPI-91f86da0-ef83-4a9a-a1a6-dec12b06fef5';
+var apikey = 'RGAPI-11cee3b6-a6e2-4237-a225-dcb3ef39933d';
 
 
 const fetchChampionList = () => {
@@ -62,6 +62,42 @@ const fetchMatchHistory = account_id => {
     })
 }
 
+const fetchGameInfo = (game_id, player_name) => {
+    return new Promise((resolve, reject) => {
+        try{
+            let url = `${cors}https://${server_name}.api.riotgames.com//lol/match/v4/matches/${game_id}?api_key=${apikey}`;
+            axios.get(url).then(result => {
+                console.log("Result: ", result);
+                let ids = result.data.participantIdentities;
+                let single_id = ids.find(champ => {
+                    return champ.player.summonerName.toLowerCase() === player_name.toLowerCase();
+                })
+
+                single_id = single_id.participantId;
+                let participant = result.data.participants.find(val => {
+                    return val.participantId === single_id;
+                })
+
+                let result_obj = {
+                    name: player_name,
+                    summoner_spells: [participant.spell1Id, participant.spell2Id],
+                    score: `${participant.stats.kills}-${participant.stats.deaths}-${participant.stats.assists}`,
+                    farm: participant.stats.totalMinionsKilled,
+                    damageDealt: participant.stats.totalDamageDealtToChampions,
+                    damageTaken: participant.stats.totalDamageTaken,
+                    visionScore: participant.stats.visionScore,
+                    win: participant.stats.win
+                }
+
+                console.log(participant);
+                resolve(result_obj);
+            })
+        }catch(err){
+            reject(err);
+        }
+    })
+}
+
 const getSplashImage = champion_name => {
     return `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion_name}_0.jpg`;
 }
@@ -70,4 +106,4 @@ const getSquareImage = (type,name) => {
     return `http://ddragon.leagueoflegends.com/cdn/${recent_patch}/img/${type}/${name}`;
 }
 
-export { getSquareImage, fetchSingleChampionData, fetchChampionList, fetchAccountId, fetchFreeWeekRotation, fetchMatchHistory, getSplashImage };
+export { getSquareImage, fetchSingleChampionData, fetchChampionList, fetchAccountId, fetchFreeWeekRotation, fetchMatchHistory, getSplashImage, fetchGameInfo };

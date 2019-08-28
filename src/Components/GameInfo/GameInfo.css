@@ -48,8 +48,22 @@
     height: 400px;
     background-color: lightgray;
     border: 1px solid black;
+    padding: 10px;
+    text-align: center;
 }
 
 .full-info-spinner {
     margin: auto;
+}
+
+.summoner-name-full {
+    text-transform: uppercase;
+    color: red;
+    text-align: center;
+    width: 100%;
+}
+
+.full-info-row {
+    width: 100%;
+    text-align: center;
 }
